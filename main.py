@@ -12,6 +12,11 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
+if __name__ == "__main__":
+
+    asyncio.run(app.run())
+    
+
 # ---------- FLASK KEEP-ALIVE ----------
 app = Flask(__name__)
 
@@ -55,10 +60,8 @@ threading.Thread(target=run_bot, daemon=True).start()
 while True:
     time.sleep(600)
 
-if __name__ == "__main__":
 
-    asyncio.run(app.run())
-    
+
 
 
 
