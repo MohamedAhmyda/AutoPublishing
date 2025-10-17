@@ -57,9 +57,10 @@ if __name__ == "__main__":
     import nest_asyncio
     nest_asyncio.apply()
     logging.info("Initializing main event loop...")
-     asyncio.run(app.run())
+    asyncio.run(app.run())
     asyncio.run(main())
     
+
 
 
 
