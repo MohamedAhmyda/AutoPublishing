@@ -12,60 +12,69 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
+import asyncio
+import threading
+import time
+import requests
+import logging
+from flask import Flask
+from pyrogram import idle
+from config import app  # بوتك من config.py
 
-# ---------- FLASK KEEP-ALIVE ----------
+# ---------- LOGGING ----------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
+# ---------- FLASK ----------
 server = Flask(__name__)
 
 @server.route('/')
 def home():
-    logging.info("HTTP / request received — service is alive.")
-    return "✅ Pyrogram bot is alive and responding!"
+    logging.info("✅ / endpoint was pinged")
+    return "Pyrogram bot is alive and Flask running."
 
 def run_server():
-    logging.info("Starting Flask keep-alive server on port 10000...")
+    logging.info("🚀 Starting Flask server on port 10000...")
     server.run(host="0.0.0.0", port=10000)
 
-# ---------- PING SELF ----------
+# ---------- SELF PING ----------
 def ping_self():
-    url = "https://autopublishing.onrender.com"  # <-- replace with your actual Render URL
+    url = "https://autopublishing.onrender.com"  # ← حط رابط Render هنا
     while True:
         try:
-            r = requests.get(url)
-            if r.status_code == 200:
-                logging.info(f"[PING] Successful self-ping: {url}")
-            else:
-                logging.warning(f"[PING] Unexpected status code: {r.status_code}")
+            requests.get(url)
+            logging.info(f"[PING] Successful self-ping to {url}")
         except Exception as e:
-            logging.error(f"[PING] Failed to ping self: {e}")
-        time.sleep(300)  # ping every 5 minutes
+            logging.error(f"[PING] Failed: {e}")
+        time.sleep(600)  # كل 10 دقايق
 
-# ---------- RUN BOT ----------
+# ---------- BOT ----------
+async def run_bot():
+    try:
+        logging.info("🤖 Starting Pyrogram bot...")
+        await app.start()
+        me = await app.get_me()
+        logging.info(f"✅ Logged in as: {me.first_name} (@{me.username})")
+        await idle()  # keeps it running
+    except Exception as e:
+        logging.error(f"❌ Error running bot: {e}")
+    finally:
+        await app.stop()
+        logging.info("🛑 Bot stopped.")
+
+# ---------- MAIN ----------
 async def main():
-    logging.info("Starting Pyrogram bot and keep-alive threads...")
-
-    # Start Flask server (thread)
+    # Run Flask in separate thread
     threading.Thread(target=run_server, daemon=True).start()
-    app.run()
-    # Start self-ping thread
+    # Run keep-alive pinger
     threading.Thread(target=ping_self, daemon=True).start()
-    # Start Pyrogram bot
-    logging.info("Launching Pyrogram bot...")
- 
+    # Run the bot
+    await run_bot()
 
 if __name__ == "__main__":
     import nest_asyncio
     nest_asyncio.apply()
-    logging.info("Initializing main event loop...")
     asyncio.run(main())
-    
-
-
-
-
-
-
-
-
-
-
-
