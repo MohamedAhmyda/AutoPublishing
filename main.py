@@ -27,7 +27,7 @@ def run_server():
 
 # ---------- PING SELF ----------
 def ping_self():
-    url = "https://your-service-name.onrender.com"  # <-- replace with your actual Render URL
+    url = "https://autopublishing.onrender.com"  # <-- replace with your actual Render URL
     while True:
         try:
             r = requests.get(url)
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     nest_asyncio.apply()
     logging.info("Initializing main event loop...")
     asyncio.run(main())
+
 
 
 
