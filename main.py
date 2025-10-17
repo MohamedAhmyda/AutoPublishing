@@ -51,13 +51,16 @@ async def main():
 
     # Start Pyrogram bot
     logging.info("Launching Pyrogram bot...")
-    await app.run()  # your bot from config.py
+ 
 
 if __name__ == "__main__":
     import nest_asyncio
     nest_asyncio.apply()
     logging.info("Initializing main event loop...")
+     asyncio.run(app.run())
     asyncio.run(main())
+    
+
 
 
 
