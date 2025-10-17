@@ -45,10 +45,9 @@ async def main():
 
     # Start Flask server (thread)
     threading.Thread(target=run_server, daemon=True).start()
-
+    app.run()
     # Start self-ping thread
     threading.Thread(target=ping_self, daemon=True).start()
-
     # Start Pyrogram bot
     logging.info("Launching Pyrogram bot...")
  
@@ -57,9 +56,9 @@ if __name__ == "__main__":
     import nest_asyncio
     nest_asyncio.apply()
     logging.info("Initializing main event loop...")
-    asyncio.run(app.run())
     asyncio.run(main())
     
+
 
 
 
