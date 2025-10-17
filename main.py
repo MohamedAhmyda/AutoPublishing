@@ -37,7 +37,7 @@ def ping_self():
                 logging.warning(f"[PING] Unexpected status code: {r.status_code}")
         except Exception as e:
             logging.error(f"[PING] Failed to ping self: {e}")
-        time.sleep(600)  # ping every 10 minutes
+        time.sleep(300)  # ping every 5 minutes
 
 # ---------- RUN BOT ----------
 async def main():
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     logging.info("Initializing main event loop...")
     asyncio.run(main())
     
+
 
 
 
